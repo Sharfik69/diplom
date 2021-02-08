@@ -22,6 +22,7 @@ class ImgWorker:
 
         self.B = {}
         self.C = {}
+        self.h = {}
 
     def save_grey_scale(self, name):
         self.img.save(name)
@@ -46,10 +47,15 @@ class ImgWorker:
 
             self.C[q[0], q[1]] = c
 
-            self.h = []
-
-            for i in range(7):
+            self.h[q[0], q[1]] = []
+            for i in range(4):
                 a = 0
+
+
+                for j in range(i + 1):
+                    a += c[j][i - j]
+                self.h[q[0], q[1]].append(a)
+            pass
 
 
 

@@ -1,13 +1,17 @@
 import gray
-import numpy as np
+import time
 
-img = gray.ImgWorker('img/test1.png')
+start_time = time.time()
+
+img = gray.ImgWorker('img/Lenna_(test_image).png')
 
 # img.save_grey_scale('img/letter_gray.png')
 
 img.create_B_matrix()
 
 img.work_with_b()
+
+img.test()
 # x = np.array([[1, 2, 3, 4, 23, 13, 15],
 #               [5, 6, 7, 8, 24, 23, 5],
 #               [9, 10, 11, 12, 25, 11, 12],
@@ -15,3 +19,4 @@ img.work_with_b()
 #               [17, 18, 19, 20, 27, 232, 222]])
 #
 # print(x[0:4, 1:5])
+print("--- %s seconds ---" % (time.time() - start_time))

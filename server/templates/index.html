@@ -3,6 +3,7 @@
     <title>nambavan</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 </head>
 <body onload="init({{path}})">
 <div class="header">
@@ -15,7 +16,7 @@
         {% endfor %}
     </select>
     <button onclick="load_image()">Загрузить картинку</button>
-    <button>Обработать</button>
+    <button onclick="handler_image()">Обработать</button>
     <button>Исследовать</button>
 </div>
 

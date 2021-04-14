@@ -1,7 +1,7 @@
 
 let data_path;
 let dd = false;
-
+let path;
 function init(data){
     data_path = data;
 }
@@ -10,6 +10,7 @@ function load_image() {
     var e = document.getElementById("img_list");
     var imageParent = document.getElementById("myimage");
     imageParent.src = data_path[e.value];
+    path = data_path[e.value];
     imageZoom("myimage", "myresult");
 }
 
@@ -80,4 +81,29 @@ function imageZoom(imgID, resultID) {
         y = y - window.pageYOffset;
         return {x : x, y : y};
     }
+}
+
+function handler_image() {
+
+    $.ajax('/handler_image', {
+        type: 'POST',
+        data: path,
+        contentType: 'application/json',
+        success: function(data, textStatus, jqXHR){
+            response = JSON.parse(data);
+            if (response['status'] === 'ok') {
+                alert(23);
+            }
+            else {
+                alert('Не удалось найти пост');
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            alert(errorThrown);
+        },
+        complete: function(){
+            $('.loading').hide();
+        }
+    });
+
 }

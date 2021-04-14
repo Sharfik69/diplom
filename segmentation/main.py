@@ -3,7 +3,7 @@ import time
 
 start_time = time.time()
 
-img = gray.ImgWorker('img/Lenna_(test_image).png')
+img = gray.ImgWorker('img/car.jpg')
 
 # img.save_grey_scale('img/letter_gray.png')
 

@@ -91,13 +91,6 @@ class ImgWorker:
 
             self.H = h
 
-
-
-                # for j in range(i + 1):
-                #     x, y = j, j - i
-                #     a += c[j][i - j]
-                #     h.append(a)
-
             l_max = 0.5 / max(g_y, g_x)
 
             a, b = h_kink(l_max, h), h_kink(-l_max, h)
@@ -108,9 +101,9 @@ class ImgWorker:
                 def f(x):
                     return 2 * h_2[0] + 6 * h_2[1] * x + 12 * h_2[2] * x ** 2 + 20 * h_2[3] * x ** 3 + 30 * h_2[4] * x ** 4
 
-                x = secant(f, -100000)
+                x = secant(f, -10000)
 
-                if abs(f(x) - 0) <= 0.00000009:
+                if abs(f(x)) <= 0.00000009:
                     self.coord.append(q)
 
         print(self.zero)
@@ -121,5 +114,5 @@ class ImgWorker:
         img2 = self.img
         img2 = img2.convert('RGB')
         for i in self.coord:
-            img2.putpixel((i[1], i[0]), (155, 155, 55))
+            img2.putpixel((i[1] + 1, i[0] + 1), (155, 155, 55))
         img2.save('img/test test.png')

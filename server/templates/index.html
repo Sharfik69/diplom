@@ -1,0 +1,37 @@
+<html>
+<head>
+    <title>nambavan</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body onload="init({{path}})">
+<div class="header">
+    <p>Проверочная система</p>
+</div>
+<div class="buttons_field">
+    <select id="img_list">
+        {% for file in data %}
+        <option>{{ file }}</option>
+        {% endfor %}
+    </select>
+    <button onclick="load_image()">Загрузить картинку</button>
+    <button>Обработать</button>
+    <button>Исследовать</button>
+</div>
+
+<div class="img-zoom-container" id="mycontainer">
+    <img id="myimage">
+    <div class="result">
+        <div id="myresult" class="img-zoom-result"></div>
+        <div>
+            <p>1</p>
+            <p>2</p>
+            <p>3</p>
+            <p>4</p>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

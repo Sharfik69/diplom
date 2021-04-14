@@ -1,0 +1,39 @@
+body {
+    text-align: center;
+}
+
+.header {
+    text-align: center;
+}
+
+.buttons_field{
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.img-zoom-container {
+  position: relative;
+
+}
+.img-zoom-lens {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    width: 2px;
+    height: 2px;
+}
+.img-zoom-result {
+    border: 1px solid #d4d4d4;
+    width: 200px;
+    height: 200px;
+    image-rendering: pixelated;
+}
+
+.result {
+    float: right;
+}
+
+#myimage {
+    float: left;
+    image-rendering: pixelated;
+}

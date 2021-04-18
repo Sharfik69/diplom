@@ -1,7 +1,7 @@
 <html>
 <head>
     <title>nambavan</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 </head>
@@ -17,13 +17,14 @@
     </select>
     <button onclick="load_image()">Загрузить картинку</button>
     <button onclick="handler_image()">Обработать</button>
+    <button onclick="changeImage()">Результат</button>
     <button>Исследовать</button>
 </div>
 
 <div class="img-zoom-container" id="mycontainer">
     <img id="myimage">
     <div class="result">
-        <div id="myresult" class="img-zoom-result"></div>
+        <div class="img-zoom-result" id="myresult"></div>
         <div>
             <p>1</p>
             <p>2</p>

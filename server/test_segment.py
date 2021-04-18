@@ -1,5 +1,6 @@
-import gray
 import time
+
+import gray
 
 start_time = time.time()
 

@@ -2,6 +2,8 @@
 let data_path;
 let dd = false;
 let path;
+let handler_img_path = null;
+
 function init(data){
     data_path = data;
 }
@@ -9,8 +11,9 @@ function init(data){
 function load_image() {
     var e = document.getElementById("img_list");
     var imageParent = document.getElementById("myimage");
-    imageParent.src = data_path[e.value];
     path = data_path[e.value];
+    imageParent.src = path;
+    handler_img_path = null;
     imageZoom("myimage", "myresult");
 }
 
@@ -92,7 +95,8 @@ function handler_image() {
         success: function(data, textStatus, jqXHR){
             response = JSON.parse(data);
             if (response['status'] === 'ok') {
-                alert(23);
+                alert(response['handler_img']);
+                handler_img_path = response['handler_img'];
             }
             else {
                 alert('Не удалось найти пост');
@@ -106,4 +110,12 @@ function handler_image() {
         }
     });
 
+}
+
+function changeImage() {
+    if (handler_img_path != null) {
+        var imageParent = document.getElementById("myimage");
+        imageParent.src = handler_img_path;
+        imageZoom("myimage", "myresult");
+    }
 }

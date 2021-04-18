@@ -6,7 +6,6 @@ def secant(f, x0, eps: float = 1e-7, kmax: int = 1e3):
 
     return x
 
-
 # def f(x):
 #     return x ** 2 - 9
 #

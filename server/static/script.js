@@ -3,9 +3,16 @@ let data_path;
 let dd = false;
 let path;
 let handler_img_path = null;
+let global_x = null, global_y = null;
+
+let super_info = {
+    'status': false,
+    'data': null
+}
 
 function init(data){
     data_path = data;
+    $('.loader').hide();
 }
 
 function load_image() {
@@ -13,7 +20,7 @@ function load_image() {
     var imageParent = document.getElementById("myimage");
     path = data_path[e.value];
     imageParent.src = path;
-    handler_img_path = null;
+//    handler_img_path = null;
     imageZoom("myimage", "myresult");
 }
 
@@ -46,6 +53,7 @@ function imageZoom(imgID, resultID) {
 
 
     function changeDD(e){
+        console.log(super_info['data'])
         dd = !dd;
     }
     function moveLens(e) {
@@ -70,9 +78,12 @@ function imageZoom(imgID, resultID) {
         if (y < 0) {
             y = 0;
         }
-        lens.style.left = x + "px";
-        lens.style.top = y + "px";
-        result.style.backgroundPosition = "-" + (x * cx) + "px -" + (y * cy) + "px";
+        lens.style.left = Math.round(x) + "px";
+        lens.style.top = Math.round(y) + "px";
+        result.style.backgroundPosition = "-" + (Math.round(x) * cx) + "px -" + (Math.round(y) * cy) + "px";
+
+        global_x = Math.round(x);
+        global_y = Math.round(y);
     }
     function getCursorPos(e) {
         var a, x = 0, y = 0;
@@ -86,8 +97,42 @@ function imageZoom(imgID, resultID) {
     }
 }
 
-function handler_image() {
+function show_info() {
+    console.log(global_x + " " + global_y);
+    $('#coordinates').text(global_x + " ; " + global_y);
+    show_info_helper('B');
+    show_info_helper('C');
 
+    H = super_info['data']['h']['(' + global_x + ', ' + global_y + ')'];
+    $('.H_INFO').empty();
+    let info = '';
+    for (let i = 0; i < H.length; i++) {
+        info += H[i] + ", ";
+    }
+    $('.H_INFO').append(info);
+
+
+}
+
+function show_info_helper(letter) {
+    $('.' + letter + '_INFO').empty();
+    $('.' + letter + '_INFO').append('<table>');
+    my_data_b = super_info['data'][letter]['(' + global_x + ', ' + global_y + ')'];
+
+    for (let i = 0; i < 4; i++) {
+        $('.' + letter + '_INFO').append('<tr>');
+        for (let j = 0; j < 4; j++) {
+            $('.' + letter + '_INFO').append('<th>' + my_data_b[i][j] + '</th>');
+        }
+        $('.' + letter + '_INFO').append('</tr>');
+    }
+
+    $('.' + letter + '_INFO').append('</table>');
+
+}
+
+function handler_image() {
+    $('.loader').show();
     $.ajax('/handler_image', {
         type: 'POST',
         data: path,
@@ -97,16 +142,21 @@ function handler_image() {
             if (response['status'] === 'ok') {
                 alert(response['handler_img']);
                 handler_img_path = response['handler_img'];
+                console.log(response['data']);
+                super_info['status'] = true;
+                super_info['data'] = response['data'];
             }
             else {
                 alert('Не удалось найти пост');
+                super_info['status'] = false;
             }
         },
         error: function(jqXHR, textStatus, errorThrown){
             alert(errorThrown);
+            super_info['status'] = false;
         },
         complete: function(){
-            $('.loading').hide();
+            $('.loader').hide();
         }
     });
 

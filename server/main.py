@@ -28,9 +28,17 @@ def handler_image():
     img.work_with_b()
     img_name = img.test()
 
+    data = {
+        'B': {str(key): val.tolist() for key, val in img.B.items()},
+        'C': {str(key): val.tolist() for key, val in img.C.items()},
+        'coord': img.coord,
+        'h': {str(key): val for key, val in img.h.items()},
+        'z': img.zero
+    }
+    print(data.values())
     handler_img = url_for('static', filename=os.path.join('img', img_name))
 
-    return json.dumps({'status': 'ok', 'handler_img': handler_img})
+    return json.dumps({'status': 'ok', 'handler_img': handler_img, 'data': data})
 
 
 @app.route('/info', methods=['POST'])

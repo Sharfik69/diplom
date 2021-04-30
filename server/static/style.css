@@ -18,7 +18,7 @@ body {
 }
 .img-zoom-lens {
     position: absolute;
-    border: 1px solid #d4d4d4;
+    border: 1px solid #ff0000;
     width: 2px;
     height: 2px;
 }

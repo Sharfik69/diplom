@@ -13,7 +13,6 @@ class ImgWorker:
             self.img = self.img.convert('RGB')
 
         self.img = self.img.convert('L')
-
         self.P = np.array(self.img)
 
         self.K = np.array([
@@ -38,7 +37,7 @@ class ImgWorker:
         for i in range(len(self.P) - 3):
             for j in range(len(self.P[0]) - 3):
                 p = self.P[i:i + 4, j:j + 4]
-                self.B[i, j] = np.transpose(self.K) * p * self.K
+                self.B[i, j] = self.K.transpose() * p * self.K
 
     def work_with_b(self):
 

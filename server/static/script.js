@@ -45,19 +45,27 @@ function imageZoom(imgID, resultID) {
 
     lens.addEventListener("mousemove", moveLens);
 //    lens.addEventListener("touchmove", moveLens);
-    lens.addEventListener("mouseup", changeDD);
+    lens.addEventListener("mouseup", clearDD);
+    lens.addEventListener("mousedown", setDD);
 
     img.addEventListener("mousemove", moveLens);
 //    img.addEventListener("touchmove", moveLens);
-    img.addEventListener("mouseup", changeDD);
+    img.addEventListener("mouseup", clearDD);
+    img.addEventListener("mousedown", setDD);
 
 
     function changeDD(e){
         console.log(super_info['data'])
         dd = !dd;
     }
+    function clearDD(e){
+        dd = 0;
+    }
+    function setDD(e){
+        dd = 1;
+    }
     function moveLens(e) {
-        if (dd) {
+        if (!dd) {
             return;
         }
         var pos, x, y;
@@ -84,6 +92,7 @@ function imageZoom(imgID, resultID) {
 
         global_x = Math.round(x);
         global_y = Math.round(y);
+        show_info();
     }
     function getCursorPos(e) {
         var a, x = 0, y = 0;
@@ -103,22 +112,21 @@ function show_info() {
     show_info_helper('B');
     show_info_helper('C');
 
-    H = super_info['data']['h']['(' + global_x + ', ' + global_y + ')'];
+    H = super_info['data']['h']['(' + global_y + ', ' + global_x + ')'];
     $('.H_INFO').empty();
+    if (!H) return;
     let info = '';
     for (let i = 0; i < H.length; i++) {
         info += H[i] + ", ";
     }
     $('.H_INFO').append(info);
-
-
 }
 
 function show_info_helper(letter) {
     $('.' + letter + '_INFO').empty();
+    my_data_b = super_info['data'][letter]['(' + global_y + ', ' + global_x + ')'];
+    if (!my_data_b) return;
     $('.' + letter + '_INFO').append('<table>');
-    my_data_b = super_info['data'][letter]['(' + global_x + ', ' + global_y + ')'];
-
     for (let i = 0; i < 4; i++) {
         $('.' + letter + '_INFO').append('<tr>');
         for (let j = 0; j < 4; j++) {

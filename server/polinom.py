@@ -6,6 +6,20 @@ def secant(f, x0, eps: float = 1e-7, kmax: int = 1e3):
 
     return x
 
+def bisect(f, x0,x1, eps: float = 1e-7):
+    f0 = f(x0)
+    f1 = f(x1)
+    while True:
+        xc = (x0+x1)*0.5
+        fc = f(xc)
+        if abs(fc)<eps:
+            return xc
+        if (f0<0)==(fc>0):
+            x1=xc
+            f1=fc
+        else:
+            x0=xc
+            f0=fc
 # def f(x):
 #     return x ** 2 - 9
 #

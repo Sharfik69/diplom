@@ -1,5 +1,6 @@
 import json
 import os
+import posixpath
 
 from flask import Flask, render_template, url_for, request
 
@@ -16,7 +17,7 @@ def index():
         if name.startswith('.') or 'response' in name:
             continue
         d['data'].append(name)
-        d['path'][name] = url_for('static', filename=os.path.join('img', name))
+        d['path'][name] = url_for('static', filename=posixpath.join('img', name))
     return render_template('index.html', **d)
 
 
@@ -36,7 +37,7 @@ def handler_image():
         'z': img.zero
     }
     print(data.values())
-    handler_img = url_for('static', filename=os.path.join('img', img_name))
+    handler_img = url_for('static', filename=posixpath.join('img', img_name))
 
     return json.dumps({'status': 'ok', 'handler_img': handler_img, 'data': data})
 

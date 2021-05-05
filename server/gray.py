@@ -1,7 +1,7 @@
 import numpy as np
 from PIL import Image
 
-from polinom import secant
+from polinom import secant,bisect
 
 
 class ImgWorker:
@@ -21,6 +21,7 @@ class ImgWorker:
             [9 / 16, 11 / 8, -1 / 4, -3 / 2],
             [-1 / 16, -1 / 8, 1 / 4, 1 / 2]
         ])
+        self.K_t = self.K.transpose()
 
         self.B = {}
         self.C = {}
@@ -37,13 +38,13 @@ class ImgWorker:
         for i in range(len(self.P) - 3):
             for j in range(len(self.P[0]) - 3):
                 p = self.P[i:i + 4, j:j + 4]
-                self.B[i, j] = self.K.transpose() * p * self.K
+                self.B[i, j] = np.matmul(np.matmul(self.K_t, p), self.K)
 
     def work_with_b(self):
 
         def h_kink(l, h):
-            h_2 = [koef * my_h for koef, my_h in zip([2, 6, 12, 20, 30], h[2:])]
             ans = 0
+            h_2 = [koef * my_h for koef, my_h in zip([2, 6, 12, 20, 30], h[2:])]
             for i, val in enumerate(h_2):
                 ans += l ** i * val
             return ans
@@ -66,27 +67,28 @@ class ImgWorker:
 
             self.C[q[0], q[1]] = c
 
-            h = []
+            h = [c[0][0], c[1][0]+c[0][1], c[2][0]+c[1][1]+c[0][2], c[3][0]+c[2][1]+c[1][2]+c[0][3],
+                 c[3][1]+c[2][2]+c[1][3], c[3][2]+c[2][3],c[3][3]]
 
-            for i in range(4):
-                a = 0
-                x, y = i, 0
-
-                while x != -1:
-                    a += c[x][y]
-                    x -= 1
-                    y += 1
-                h.append(a)
-
-            for j in range(1, 4):
-                a = 0
-                x, y = 3, j
-
-                while y != 4:
-                    a += c[x][y]
-                    x -= 1
-                    y += 1
-                h.append(a)
+            # for i in range(4):
+            #     a = 0
+            #     x, y = i, 0
+            #
+            #     while x >= 0:
+            #         a += c[x][y]
+            #         x -= 1
+            #         y += 1
+            #     h.append(a)
+            # Не уверен во втором цикле
+            # for j in range(1, 4):
+            #     a = 0
+            #     x, y = 3, j
+            #
+            #     while y != 4:
+            #         a += c[x][y]
+            #         x -= 1
+            #         y += 1
+            #     h.append(a)
 
             self.h[q[0], q[1]] = h
 
@@ -94,17 +96,15 @@ class ImgWorker:
 
             self.l_max_f[q[0], q[1]] = l_max
 
-            a, b = h_kink(l_max, h), h_kink(-l_max, h)
+            def f(x):
+                return 2 * h[2] + x * (6 * h[3] + x * (12 * h[4] + x * (20 * h[5] + x * 30 * h[6])))
+
+            a, b = f(l_max), f(-l_max)
 
             if a * b < 0:
                 self.zero += 1
-                h_2 = h[2:]
-
-                def f(x):
-                    return 2 * h_2[0] + 6 * h_2[1] * x + 12 * h_2[2] * x ** 2 + 20 * h_2[3] * x ** 3 + 30 * h_2[
-                        4] * x ** 4
-
-                x = secant(f, -10000)
+                #x = secant(f, -10000)
+                x = bisect(f,-l_max,l_max)
 
                 if abs(f(x)) <= 0.00000009:
                     self.coord.append(q)

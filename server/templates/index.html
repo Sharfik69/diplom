@@ -7,8 +7,16 @@
     <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
     <style>
         table, th, td {
-          border: 1px solid black;
+            border: 1px solid black;
         }
+        table, tr {
+            width: 100%;
+        }
+        td {
+            width: 25%;
+        }
+
+
     </style>
 </head>
 <body onload="init({{path}})">
@@ -31,10 +39,14 @@
 </div>
 
 <div class="img-zoom-container" id="mycontainer">
-    <img id="myimage"><br>
+    <div class="block_image" id="block_image">
+        <img id="myimage">
+    </div>
+
+    <br>
     <div class="result">
         <div class="img-zoom-result" id="myresult"></div>
-        <div>
+        <div style="width: 90%">
             <p id="coordinates"></p>
             <p>матрица B</p>
             <div class="B_INFO"></div>

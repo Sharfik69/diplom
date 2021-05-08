@@ -30,6 +30,15 @@ function imageZoom(imgID, resultID) {
     img = document.getElementById(imgID);
     result = document.getElementById(resultID);
 
+    let blockImage = document.getElementById("block_image");
+    blockImage.addEventListener("scroll", (e) => {
+        console.log(cx + " " + cy);
+        console.log(global_x + " " + global_y);
+        console.log(blockImage.scrollLeft + " " + blockImage.scrollTop)
+        console.log(result.style.backgroundPosition)
+        result.style.backgroundPosition = "-" + (global_x * cx - blockImage.scrollLeft) + "px -" + (global_y * cy - blockImage.scrollTop) + "px";
+    })
+
     document.querySelectorAll('.img-zoom-lens').forEach(function(a){
         a.remove();
     })
@@ -71,8 +80,12 @@ function imageZoom(imgID, resultID) {
         var pos, x, y;
         e.preventDefault();
         pos = getCursorPos(e);
+
+        let blockImg = document.getElementById("block_image");
+
         x = pos.x - 1;
         y = pos.y - 1;
+
 
         if (x > img.width - lens.offsetWidth) {
             x = img.width - lens.offsetWidth;
@@ -86,8 +99,9 @@ function imageZoom(imgID, resultID) {
         if (y < 0) {
             y = 0;
         }
-        lens.style.left = Math.round(x) + "px";
-        lens.style.top = Math.round(y) + "px";
+
+        lens.style.left = (Math.round(x) - blockImg.scrollLeft) + "px";
+        lens.style.top = (Math.round(y) - blockImg.scrollTop) + "px";
         result.style.backgroundPosition = "-" + (Math.round(x) * cx) + "px -" + (Math.round(y) * cy) + "px";
 
         global_x = Math.round(x);
@@ -107,7 +121,7 @@ function imageZoom(imgID, resultID) {
 }
 
 function show_info() {
-    console.log(global_x + " " + global_y);
+    // console.log(global_x + " " + global_y);
     $('#coordinates').text(global_x + " ; " + global_y);
     show_info_helper('B');
     show_info_helper('C');
@@ -117,7 +131,7 @@ function show_info() {
     if (!H) return;
     let info = '';
     for (let i = 0; i < H.length; i++) {
-        info += H[i] + ", ";
+        info += (H[i]).toFixed(3) + ", ";
     }
     $('.H_INFO').append(info);
 }
@@ -126,16 +140,23 @@ function show_info_helper(letter) {
     $('.' + letter + '_INFO').empty();
     my_data_b = super_info['data'][letter]['(' + global_y + ', ' + global_x + ')'];
     if (!my_data_b) return;
-    $('.' + letter + '_INFO').append('<table>');
-    for (let i = 0; i < 4; i++) {
-        $('.' + letter + '_INFO').append('<tr>');
-        for (let j = 0; j < 4; j++) {
-            $('.' + letter + '_INFO').append('<th>' + my_data_b[i][j] + '</th>');
-        }
-        $('.' + letter + '_INFO').append('</tr>');
-    }
+    let str = "<table>";
 
-    $('.' + letter + '_INFO').append('</table>');
+
+
+    // $('.' + letter + '_INFO').append('<table>');
+    for (let i = 0; i < 4; i++) {
+        str += "<tr>"
+        // $('.' + letter + '_INFO').append('');
+        for (let j = 0; j < 4; j++) {
+            str += '<td>' + (my_data_b[i][j]).toFixed(3) + '</td>';
+            // $('.' + letter + '_INFO').append('<th>' + my_data_b[i][j] + '</th>');
+        }
+        str += "</tr>"
+        // $('.' + letter + '_INFO').append('</tr>');
+    }
+    str += "</table>";
+    $('.' + letter + '_INFO').append(str);
 
 }
 
@@ -177,3 +198,6 @@ function changeImage() {
         imageZoom("myimage", "myresult");
     }
 }
+
+
+

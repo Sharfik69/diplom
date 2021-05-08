@@ -13,8 +13,8 @@ body {
 }
 
 .img-zoom-container {
-  position: relative;
-
+    position: relative;
+    display: flex;
 }
 .img-zoom-lens {
     position: absolute;
@@ -31,9 +31,20 @@ body {
 
 .result {
     float: left;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+
 }
 
 #myimage {
     float: left;
     image-rendering: pixelated;
 }
+
+.block_image {
+    width: 50%;
+    overflow: scroll;
+}
+

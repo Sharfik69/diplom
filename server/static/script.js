@@ -131,7 +131,7 @@ function show_info() {
     if (!H) return;
     let info = '';
     for (let i = 0; i < H.length; i++) {
-        info += (H[i]).toFixed(3) + ", ";
+        info += (H[i]).toFixed(5) + ", ";
     }
     $('.H_INFO').append(info);
 }
@@ -149,7 +149,7 @@ function show_info_helper(letter) {
         str += "<tr>"
         // $('.' + letter + '_INFO').append('');
         for (let j = 0; j < 4; j++) {
-            str += '<td>' + (my_data_b[i][j]).toFixed(3) + '</td>';
+            str += '<td>' + (my_data_b[i][j]).toFixed(5) + '</td>';
             // $('.' + letter + '_INFO').append('<th>' + my_data_b[i][j] + '</th>');
         }
         str += "</tr>"

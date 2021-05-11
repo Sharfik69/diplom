@@ -36,7 +36,6 @@ def handler_image():
         'h': {str(key): val for key, val in img.h.items()},
         'z': img.zero
     }
-    print(data.values())
     handler_img = url_for('static', filename=posixpath.join('img', img_name))
 
     return json.dumps({'status': 'ok', 'handler_img': handler_img, 'data': data})

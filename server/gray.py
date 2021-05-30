@@ -9,6 +9,8 @@ class ImgWorker:
         self.img_name = img_name
         self.img = Image.open(img_name)
 
+        self.h_set = set()
+
         if self.img.mode != 'RGB':
             self.img = self.img.convert('RGB')
 
@@ -27,6 +29,8 @@ class ImgWorker:
         self.C = {}
         self.h = {}
         self.l_max_f = {}
+        self.angle = {}
+
 
         self.zero = 0
         self.coord = []
@@ -108,10 +112,12 @@ class ImgWorker:
                     if -l_max < root < l_max:
                         h_first = h_first_(root)
                         if abs(h_first) > h_first_max:
+                            self.h_set.add(h_first)
                             h_first_max = h_first
                             dot_ = root
 
                 if h_first_max != -1:
+                    self.angle[q[0], q[1]] = h_first_max
                     self.coord.append(q)
 
         # print(self.zero)
@@ -119,13 +125,14 @@ class ImgWorker:
         #     print(i)
 
     def test(self):
+        print(self.h_set)
         img2 = self.img
         img2 = img2.convert('RGB')
-        for i in self.coord:
-            img2.putpixel((i[1] + 1, i[0] + 1), (155, 155, 55))
-            img2.putpixel((i[1] + 2, i[0] + 1), (155, 155, 55))
-            img2.putpixel((i[1] + 1, i[0] + 2), (155, 155, 55))
-            img2.putpixel((i[1] + 2, i[0] + 2), (155, 155, 55))
+        # for i in self.coord:
+        #     img2.putpixel((i[1] + 1, i[0] + 1), (155, 155, 55))
+            # img2.putpixel((i[1] + 2, i[0] + 1), (155, 155, 55))
+            # img2.putpixel((i[1] + 1, i[0] + 2), (155, 155, 55))
+            # img2.putpixel((i[1] + 2, i[0] + 2), (155, 155, 55))
 
         file_name = '{}_response.png'.format(self.img_name.split('/')[-1].split('.')[0])
 

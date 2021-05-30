@@ -34,7 +34,8 @@ def handler_image():
         'C': {str(key): val.tolist() for key, val in img.C.items()},
         'coord': img.coord,
         'h': {str(key): val for key, val in img.h.items()},
-        'z': img.zero
+        'z': img.zero,
+        'angle': {str(key): val for key, val in img.angle.items()}
     }
     handler_img = url_for('static', filename=posixpath.join('img', img_name))
 

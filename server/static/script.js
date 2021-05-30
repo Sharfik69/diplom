@@ -4,6 +4,7 @@ let dd = false;
 let path;
 let handler_img_path = null;
 let global_x = null, global_y = null;
+let canva;
 
 let super_info = {
     'status': false,
@@ -17,11 +18,26 @@ function init(data){
 
 function load_image() {
     var e = document.getElementById("img_list");
-    var imageParent = document.getElementById("myimage");
+    // var imageParent = document.getElementById("myimage");
+    canva = document.getElementById("canva");
     path = data_path[e.value];
-    imageParent.src = path;
+    // imageParent.src = path;
 //    handler_img_path = null;
     imageZoom("myimage", "myresult");
+    canva.width = imageParent.width;
+    canva.height = imageParent.height;
+    
+    var ctx = canva.getContext("2d");
+
+    var img = new Image;
+    img.onload = function(){
+      ctx.drawImage(img, 0, 0);
+    };
+    img.src = path;
+    
+    console.log(img);
+
+    // ctx.drawImage(imageParent, 0, 0);
 }
 
 function imageZoom(imgID, resultID) {
@@ -168,7 +184,9 @@ function handler_image() {
         contentType: 'application/json',
         success: function(data, textStatus, jqXHR){
             response = JSON.parse(data);
+            console.log(response);
             if (response['status'] === 'ok') {
+
                 alert(response['handler_img']);
                 handler_img_path = response['handler_img'];
                 console.log(response['data']);

@@ -8,7 +8,6 @@ body {
 
 .buttons_field{
     padding: 10px;
-    display: flex;
     justify-content: center;
 }
 
@@ -38,6 +37,12 @@ body {
 
 }
 
+/* #canva {
+    position: absolute;
+    left: 0;
+    top: 0;
+} */
+
 #myimage {
     float: left;
     image-rendering: pixelated;
@@ -45,6 +50,6 @@ body {
 
 .block_image {
     width: 50%;
-    overflow: scroll;
+    /* overflow: scroll; */
 }
 

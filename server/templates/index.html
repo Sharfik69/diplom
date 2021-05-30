@@ -2,7 +2,7 @@
 <head>
     <title>nambavan</title>
     <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="{{ url_for('static', filename='script2.js') }}"></script>
 <!--    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>-->
     <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
     <style>
@@ -32,7 +32,8 @@
     <button onclick="load_image()">Загрузить картинку</button>
     <button onclick="handler_image()">Обработать</button>
     <button onclick="changeImage()">Результат</button>
-    <button onclick="show_info()">Исследовать</button>
+    <p><input id="number" type="number" value="10">Угол</p>
+    <p><input id="grey_check" type="checkbox" onclick="makeGray()">Серые тона</p>
     <div class="loader">
         <p>Идет обработка на сервере</p>
     </div>
@@ -40,8 +41,10 @@
 
 <div class="img-zoom-container" id="mycontainer">
     <div class="block_image" id="block_image">
-        <img id="myimage">
+        <!-- <img id="myimage"> -->
+        <canvas id="canva"></canvas>
     </div>
+    
 
     <br>
     <div class="result">

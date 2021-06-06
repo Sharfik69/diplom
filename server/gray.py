@@ -1,14 +1,18 @@
+import os
+
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageDraw
+from scipy.spatial import Delaunay
 
 from polinom import secant, bisect, bisect_numpy
 
 
 class ImgWorker:
-    def __init__(self, img_name):
+    def __init__(self, img_name, angle=3000):
         self.img_name = img_name
         self.img = Image.open(img_name)
-
+        self.angle = angle
+        self.cnt = 0
         if self.img.mode != 'RGB':
             self.img = self.img.convert('RGB')
 
@@ -108,10 +112,10 @@ class ImgWorker:
                     if -l_max < root < l_max:
                         h_first = h_first_(root)
                         if abs(h_first) > h_first_max:
-                            h_first_max = h_first
+                            h_first_max = abs(h_first)
                             dot_ = root
 
-                if h_first_max != -1:
+                if h_first_max != -1 and h_first_max >= self.angle:
                     self.coord.append(q)
 
         # print(self.zero)
@@ -122,13 +126,26 @@ class ImgWorker:
         img2 = self.img
         img2 = img2.convert('RGB')
         for i in self.coord:
-            img2.putpixel((i[1] + 1, i[0] + 1), (155, 155, 55))
-            img2.putpixel((i[1] + 2, i[0] + 1), (155, 155, 55))
-            img2.putpixel((i[1] + 1, i[0] + 2), (155, 155, 55))
-            img2.putpixel((i[1] + 2, i[0] + 2), (155, 155, 55))
+            img2.putpixel((i[1] + 1, i[0] + 1), (255, 0, 0))
+            # img2.putpixel((i[1] + 2, i[0] + 1), (155, 155, 55))
+            # img2.putpixel((i[1] + 1, i[0] + 2), (155, 155, 55))
+            # img2.putpixel((i[1] + 2, i[0] + 2), (155, 155, 55))
 
         file_name = '{}_response.png'.format(self.img_name.split('/')[-1].split('.')[0])
-
         img2.save('static/img/{}'.format(file_name))
 
         return file_name
+
+
+    def set_triangulation(self):
+        points = np.array(self.coord)
+        tri = Delaunay(points)
+        img1 = ImageDraw.Draw(self.img)
+        print(self.angle)
+        for i in tri.simplices:
+            x, y, z = points[i[0]], points[i[1]], points[i[2]]
+            l = [(tuple(a[::-1]), tuple(b[::-1])) for a, b in [(x, y), (x, z), (y, z)]]
+            for line in l:
+                img1.line(line, fill="red", width=0)
+
+        self.img.show()

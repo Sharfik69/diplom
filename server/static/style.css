@@ -8,8 +8,8 @@ body {
 
 .buttons_field{
     padding: 10px;
-    display: flex;
-    justify-content: center;
+    /* display: flex;
+    justify-content: center; */
 }
 
 .img-zoom-container {

@@ -4,7 +4,7 @@ import gray
 
 start_time = time.time()
 
-img = gray.ImgWorker('img/car.jpg')
+img = gray.ImgWorker('/Users/zaguzin/PycharmProjects/diplom/server/static/img/Richard.jpeg')
 
 # img.save_grey_scale('img/letter_gray.png')
 
@@ -12,7 +12,7 @@ img.create_B_matrix()
 
 img.work_with_b()
 
-img.test()
+# img.test()
 # x = np.array([[1, 2, 3, 4, 23, 13, 15],
 #               [5, 6, 7, 8, 24, 23, 5],
 #               [9, 10, 11, 12, 25, 11, 12],
@@ -20,4 +20,7 @@ img.test()
 #               [17, 18, 19, 20, 27, 232, 222]])
 #
 # print(x[0:4, 1:5])
+
+img.set_triangulation()
+
 print("--- %s seconds ---" % (time.time() - start_time))

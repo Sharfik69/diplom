@@ -7,7 +7,7 @@ from flask import Flask, render_template, url_for, request
 from gray import ImgWorker
 
 app = Flask(__name__)
-
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 @app.route('/')
 def index():
@@ -23,8 +23,9 @@ def index():
 
 @app.route('/handler_image', methods=['POST'])
 def handler_image():
-    path = request.data.decode('utf-8')
-    img = ImgWorker(path[1:])
+    resp = request.json
+    angle = 10 if resp['angle'] is None else resp['angle']
+    img = ImgWorker(resp['path'][1:], angle)
     img.create_B_matrix()
     img.work_with_b()
     img_name = img.test()
@@ -34,16 +35,28 @@ def handler_image():
         'C': {str(key): val.tolist() for key, val in img.C.items()},
         'coord': img.coord,
         'h': {str(key): val for key, val in img.h.items()},
-        'z': img.zero
+        'z': img.zero,
+        'l_max': {str(key): val for key, val in img.l_max_f.items()}
     }
     handler_img = url_for('static', filename=posixpath.join('img', img_name))
-
     return json.dumps({'status': 'ok', 'handler_img': handler_img, 'data': data})
 
 
 @app.route('/info', methods=['POST'])
 def info():
     path = request.data.decode('utf-8')
+
+@app.after_request
+def add_header(r):
+    """
+    Add headers to both force latest IE rendering engine or Chrome Frame,
+    and also to cache the rendered page for 10 minutes.
+    """
+    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    r.headers['Cache-Control'] = 'public, max-age=0'
+    return r
 
 if __name__ == "__main__":
     img = None

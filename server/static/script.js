@@ -1,4 +1,3 @@
-
 let data_path;
 let dd = false;
 let path;
@@ -128,12 +127,50 @@ function show_info() {
 
     H = super_info['data']['h']['(' + global_y + ', ' + global_x + ')'];
     $('.H_INFO').empty();
+    let z = 10; // масштаб
+    let c = document.querySelector('canvas');
+    let ctx = c.getContext('2d');
+    ctx.clearRect(0, 0, c.width, c.height);
     if (!H) return;
     let info = '';
     for (let i = 0; i < H.length; i++) {
         info += (H[i]).toFixed(5) + ", ";
     }
     $('.H_INFO').append(info);
+
+
+    // let y = x => x*x; // функция
+    let y = x => H[1] + 2 * H[2] * x + 3 * H[3] * (x ** 2) + 4 * H[4] * (x ** 3) + 5 * H[5] * (x ** 4) + 6 * H[6] * (x ** 5);
+    
+
+    
+    // центровочка
+    ctx.translate(c.width/2, c.height/2)
+
+    // сетка
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    from_to = super_info['data']['l_max']['(' + global_y + ', ' + global_x + ')'];
+    for (let x1 = -3; x1 < 3; x1 += 1) {
+        ctx.moveTo(x1*z, -c.height/2);
+        ctx.lineTo(x1*z, c.height/2);
+        ctx.moveTo(-c.width/2, x1*z);
+        ctx.lineTo(c.width/2, x1*z);
+    }
+    ctx.stroke();
+    // график функции
+    ctx.strokeStyle = "red";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+
+    
+    console.log(from_to);
+    for (let q = -4; q <= 4; q += 0.01) {
+        ctx[q?'lineTo':'moveTo'](q*z, -y(q)*z);
+    }
+    ctx.stroke();
+    ctx.translate(-c.width/2, -c.height/2)
 }
 
 function show_info_helper(letter) {
@@ -164,10 +201,13 @@ function handler_image() {
     $('.loader').show();
     $.ajax('/handler_image', {
         type: 'POST',
-        data: path,
+        data: JSON.stringify({'path': path, 'angle': parseInt(document.getElementById('numb_angle').value)}),
         contentType: 'application/json',
+        dataType: 'json',
         success: function(data, textStatus, jqXHR){
-            response = JSON.parse(data);
+            console.log(data);
+            // response = JSON.parse(data);
+            response = data;
             if (response['status'] === 'ok') {
                 alert(response['handler_img']);
                 handler_img_path = response['handler_img'];
@@ -194,9 +234,13 @@ function handler_image() {
 function changeImage() {
     if (handler_img_path != null) {
         var imageParent = document.getElementById("myimage");
-        imageParent.src = handler_img_path;
+        imageParent.src = handler_img_path+ "?" + new Date().getTime();;
         imageZoom("myimage", "myresult");
     }
+
+
+    
+
 }
 
 

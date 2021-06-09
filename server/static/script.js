@@ -127,7 +127,7 @@ function show_info() {
 
     H = super_info['data']['h']['(' + global_y + ', ' + global_x + ')'];
     $('.H_INFO').empty();
-    let z = 10; // масштаб
+    let z = 40; // масштаб
     let c = document.querySelector('canvas');
     let ctx = c.getContext('2d');
     ctx.clearRect(0, 0, c.width, c.height);
@@ -166,7 +166,7 @@ function show_info() {
 
     
     console.log(from_to);
-    for (let q = -4; q <= 4; q += 0.01) {
+    for (let q = -2; q <= 2; q += 0.01) {
         ctx[q?'lineTo':'moveTo'](q*z, -y(q)*z);
     }
     ctx.stroke();

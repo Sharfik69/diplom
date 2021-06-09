@@ -8,7 +8,7 @@ from polinom import secant, bisect, bisect_numpy
 
 
 class ImgWorker:
-    def __init__(self, img_name, angle=3000):
+    def __init__(self, img_name, angle=1500):
         self.img_name = img_name
         self.img = Image.open(img_name)
         self.angle = angle

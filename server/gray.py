@@ -1,7 +1,7 @@
 import os
 
 import numpy as np
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFilter
 from scipy.spatial import Delaunay
 
 from polinom import secant, bisect, bisect_numpy
@@ -11,6 +11,7 @@ class ImgWorker:
     def __init__(self, img_name, angle=1500):
         self.img_name = img_name
         self.img = Image.open(img_name)
+        self.img = self.img.filter(ImageFilter.GaussianBlur(radius=1))
         self.angle = angle
         self.cnt = 0
         if self.img.mode != 'RGB':
@@ -115,8 +116,9 @@ class ImgWorker:
                             h_first_max = abs(h_first)
                             dot_ = root
 
-                if h_first_max != -1 and h_first_max >= self.angle:
-                    self.coord.append(q)
+                # if h_first_max != -1 and h_first_max >= self.angle:
+                #     self.coord.append(q)
+                self.coord.append((h_first_max, q))
 
         # print(self.zero)
         # for i in self.coord:
@@ -125,11 +127,13 @@ class ImgWorker:
     def test(self):
         img2 = self.img
         img2 = img2.convert('RGB')
-        for i in self.coord:
-            img2.putpixel((i[1] + 1, i[0] + 1), (255, 0, 0))
-            # img2.putpixel((i[1] + 2, i[0] + 1), (155, 155, 55))
-            # img2.putpixel((i[1] + 1, i[0] + 2), (155, 155, 55))
-            # img2.putpixel((i[1] + 2, i[0] + 2), (155, 155, 55))
+        for angle, i in self.coord:
+            if angle >= self.angle:
+                rgb = (255, 0, 0)
+                img2.putpixel((i[1] + 1, i[0] + 1), rgb)
+                img2.putpixel((i[1] + 2, i[0] + 1), rgb)
+                img2.putpixel((i[1] + 1, i[0] + 2), rgb)
+                img2.putpixel((i[1] + 2, i[0] + 2), rgb)
 
         file_name = '{}_response.png'.format(self.img_name.split('/')[-1].split('.')[0])
         img2.save('static/img/{}'.format(file_name))
